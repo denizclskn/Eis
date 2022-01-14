@@ -1,0 +1,17 @@
+.formDiv{
+    margin: auto;
+    width: 40%;
+    padding: 10px;
+    background-color: beige;
+}
+
+.formDiv div {
+    margin: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+

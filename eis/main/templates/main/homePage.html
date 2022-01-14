@@ -1,0 +1,253 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css/map.css' %}">
+<div class="wrapDiv">
+
+  <div class="textDiv">
+    <h3 style="color: darkred; font-size: large; font-weight: bold;">Rapor oluşturmaya başlamak için enlem boylam girin
+      veya haritadan seçin.
+      Şuan sadece anadolu yakası için tam hizmet
+      verebiliyoruz.</h3>
+    <!--<input type="text" id="txt">
+      <button onclick="calculateVS()"></button>-->
+
+  </div>
+
+</div>
+
+
+<div id="map">
+
+</div>
+
+<div class="formDiv" name="mapForm">
+  <form action="" method="POST" onsubmit="return lastfunc();">
+    {% csrf_token %}
+    <div class="latitudeDiv">
+      <label for="latitude">Enlem: </label>
+      {{form.latitude}}
+    </div>
+    <div class="longitudeDiv">
+      <label for="longitude">Boylam: </label>
+      {{form.longitude}}
+    </div>
+    <div class="userDiv">
+      {{form.user}}
+      {{form.vs30}}
+    </div>
+
+    <div class="buttonDiv">
+      <!--<input type="button" class="btn btn-secondary" id="fwd1" value="Güncelle" onclick="updateMarker()"
+          style="margin-bottom: 5px;">-->
+      <input type="submit" class="btn btn-secondary" id="fwd2" value="İleri">
+    </div>
+  </form>
+</div>
+
+<input type="hidden" id="nameField" value="{{user.username}}">
+
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCLJpFxEX6UR6TpunJSsoqtfZQKCOdBDko&callback=initMap&libraries=&v=weekly"
+  async></script>
+<script>
+  let map;
+  let markers = [];
+  var form_fields = document.getElementsByTagName('input')
+  var lat = 41
+  var lng = 29.12
+  form_fields[1].value = lat
+  form_fields[2].value = lng
+  form_fields[3].value = document.getElementById("nameField").value
+  form_fields[4].value = 0
+  var input1 = form_fields[1]
+  var input2 = form_fields[2]
+
+
+  function initMap() {
+    var anadolu = { lat, lng };
+    map = new google.maps.Map(document.getElementById("map"), { zoom: 12, center: anadolu, });
+    var marker = new google.maps.Marker({ map: map, draggable: true });
+    marker.setPosition(anadolu)
+
+    /*
+    input1.addEventListener('change', function (marker) {
+      l1 = parseFloat(form_fields[1].value)
+      l2 = parseFloat(form_fields[2].value)
+      newPos = { lat: l1, lng: l2 }
+      marker.setPosition(newPos)
+    });
+
+    input2.addEventListener('change', function (marker) {
+      l1 = parseFloat(form_fields[1].value)
+      l2 = parseFloat(form_fields[2].value)
+      newPos = { l1, l2 }
+      window.alert(newPos)
+      marker.setPosition(newPos)
+    });*/
+
+
+    google.maps.event.addListener(marker, 'dragend', (event) => {
+      lat = marker.getPosition().lat()
+      lng = marker.getPosition().lng()
+      form_fields[1].value = lat
+      form_fields[2].value = lng
+    });
+
+  }
+
+  
+
+  var temp1 = "{{vs|safe}}";
+  var vsvals = []
+  var temp2 = "{{latitude|safe}}";
+  var latvals = []
+  var temp3 = "{{longitude|safe}}";
+  var lngvals = []
+  var first = 1
+  var second = 1
+  var third = 1
+  for (let i = 1; i < temp1.length; i++) {
+    if (temp1[i] == ",") {
+      vsvals.push(temp1.slice(first, i))
+      first = i + 1
+    } else if (temp1[i] == "]") {
+      vsvals.push(temp1.slice(first, i))
+      break;
+    }
+  }
+  for (let i = 1; i < temp2.length; i++) {
+    if (temp2[i] == ",") {
+      latvals.push(temp2.slice(second, i))
+      second = i + 1
+    } else if (temp2[i] == "]") {
+      latvals.push(temp2.slice(second, i))
+      break;
+    }
+  }
+  for (let i = 1; i < temp3.length; i++) {
+    if (temp3[i] == ",") {
+      lngvals.push(temp3.slice(third, i))
+      third = i + 1
+    } else if (temp3[i] == "]") {
+      lngvals.push(temp3.slice(third, i))
+      break;
+    }
+  }
+  var excelLng = lngvals.map(Number)
+  var excelLat = latvals.map(Number)
+  var vs = vsvals.map(Number)
+
+  function findClosest(arr, num) {
+    tempClosest = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (Math.abs(parseFloat(arr[i]) - num) < Math.abs(tempClosest - num)) {
+        tempClosest = parseFloat(arr[i])
+      }
+    }
+    return tempClosest;
+  }
+
+  function calculateVS() {
+    goal1 = parseFloat(form_fields[1].value);
+    goal2 = parseFloat(form_fields[2].value);
+    closestLat = findClosest(excelLat, goal1)
+    closestLng = findClosest(excelLng, goal2)
+    indexLat = excelLat.findIndex(x => x == closestLat);
+    indexLng = excelLng.findIndex(x => x == closestLng);
+    error1 = Math.abs(excelLat[indexLat] - goal1) + Math.abs(excelLng[indexLat] - goal2)
+    error2 = Math.abs(excelLat[indexLng] - goal1) + Math.abs(excelLng[indexLng] - goal2)
+    if (error1 < 1 || error2 < 1) {
+      if (error1 < error2) {
+        form_fields[4].value = vs[indexLat]
+      } else {
+        form_fields[4].value = vs[indexLng]
+      }
+    } else {
+      form_fields[4].value = 0
+    }
+    checkVS = parseFloat(form_fields[4].value)
+    if (checkVS == 0) {
+      window.alert("Seçilen koordinatlar pilot alanımızın dışında bu yüzden zemin sınıfı en kötü olarak varsayılacak. Daha doğru sonuçlar için İstanbul anadolu yakasından bir yer seçmeniz gerekmektedir.")
+      return true
+    } else if (checkVS > 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
+  function validate() {
+    var flag = true;
+    var dotcount1 = 0;
+    var dotcount2 = 0;
+    if (form_fields[1].value.charAt(0) != "-" && isNaN(parseInt(form_fields[1].value.charAt(0)))) {
+      flag = false
+    }
+    for (let i = 1; i < form_fields[1].value.length; i++) {
+      if (dotcount1 < 2) {
+        if (form_fields[1].value.charAt(i) == '.') {
+          dotcount1 = dotcount1 + 1;
+        } else if (isNaN(parseInt(form_fields[1].value.charAt(i)))) {
+          flag = false;
+          break;
+        }
+      } else {
+        flag = false;
+        break;
+      }
+    }
+
+    if (form_fields[2].value.charAt(0) != "-" && isNaN(parseInt(form_fields[2].value.charAt(0)))) {
+      flag = false
+    }
+    for (let i = 1; i < form_fields[2].value.length; i++) {
+      if (dotcount2 < 2) {
+        if (form_fields[2].value.charAt(i) == '.') {
+          dotcount2 = dotcount2 + 1;
+        } else if (isNaN(parseInt(form_fields[2].value.charAt(i)))) {
+          flag = false;
+          break;
+        }
+      } else {
+        flag = false;
+        break;
+      }
+    }
+
+    if (flag) {
+      latitude = parseFloat(form_fields[1].value)
+      longitude = parseFloat(form_fields[2].value)
+
+      if (latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180 && check1 && check2) {
+        return true
+      } else {
+        window.alert("Girdiğiniz değerler hatalı! Enlem değeri -90 ile 90 arasında boylam değeri -180 ile 180 arasında olmalı")
+        return false
+      }
+    } else {
+      window.alert("Girilen değer sayı değil.")
+      return false
+    }
+
+  }
+
+  function lastfunc() {
+    funcFlag1 = calculateVS();
+    funcFlag2 = validate();
+    if (funcFlag1 && funcFlag2) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
+
+</script>
+{% endblock %}

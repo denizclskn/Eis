@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+    
+}
+
+.mainDiv {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+
+#myInput {
+    width: 40%;
+    font-size: 14px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+  
+#myUL {
+    width: 60%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+  
+#myUL li {
+    border: 1px solid #ddd;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 14px;
+    color: black;
+    display: flex;
+    flex-direction: row;
+}
+#myUL li a{
+    width: 25%;
+    font-size: 1vw;
+    text-align: center;
+
+}
+  
+.nameDiv{
+    width: 60%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.buttonDiv{
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+}
+

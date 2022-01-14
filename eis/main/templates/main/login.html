@@ -1,0 +1,28 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css\login.css' %}">
+<div class="messageDiv" style="margin-bottom: 20px;">
+  {% for message in messages %}
+    <p>{{ message }}</p>
+  {% endfor %}
+</div>
+<div class="login">
+    <h1>Deprem Bilgi Sistemine Giriş Yap</h1>
+    <form method="POST" action="">
+      {% csrf_token %}
+      <p><input type="text" name="username" placeholder="username"></p>
+      <p><input type="password" name="password" placeholder="Şifre"></p>
+      <p class="submit"><input type="submit" class="btn btn-secondary btn-lg btn-block" name="commit" value="Giriş Yap"></p>
+    </form>
+  </div>
+  
+  <div class="login-help">
+    <p>Şifreni mi unuttun? <a style="color: black;" href="{% url 'reset_password' %}">Sıfırlamak için buraya tıkla</a>.</p>
+  </div>
+
+{% endblock %}

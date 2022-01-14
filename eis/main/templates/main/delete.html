@@ -1,0 +1,20 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css\delete.css' %}">
+<div class="formDiv">
+    <div class="questionDiv">
+        <p>Are you sure you want to delete "{{report}}"?</p>
+    </div>
+    <div class="buttonDiv">
+        <form action="{% url 'deleteReport' report.id %}" method="POST">
+            {% csrf_token %}
+                <a class="btn btn-sm btn-success" href="{% url 'myReports' %}">İptal</a>
+                <input class="btn btn-sm btn-danger" type="submit" value="Sil">
+        </form>
+    </div>
+</div>
+{% endblock %}

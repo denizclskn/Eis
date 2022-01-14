@@ -1,0 +1,43 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css\navbar.css' %}">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="logoDiv"><img src="{% static 'images/logo.png' %}" width="25" height="25" style="margin-right: 10px;"></div>
+    <div class="hpDiv"><a class="navbar-brand" href="{% url 'home' %}">Ana Sayfa</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+      aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'myReports' %}">Raporlarım</a>
+        </li>
+        {% endif %}
+      </ul>
+  
+      <ul class="navbar-nav ml-auto">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item active" style="margin-right: 50px;">
+          <div class="dropdown">
+            <button class="dropbtn" style="color: white; font-size: 14px;">{{request.user}}</button>
+            <div class="dropdown-content">
+              <a href="{% url 'logout' %}">Çıkış Yap</a>
+            </div>
+          </div>
+          
+        </li>
+        {% else %}
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'login' %}">Giriş Yap</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'register' %}">Kayıt Ol</a>
+        </li>
+        {% endif %}
+  
+      </ul>
+  
+    </div>
+  </nav>

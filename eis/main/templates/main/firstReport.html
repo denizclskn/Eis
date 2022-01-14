@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #0ca3d2;
+        }
+    </style>
+    <title>eis</title>
+
+</head>
+
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css\firstReport.css' %}">
+<div class="readValues">
+    <div class="titleDiv">
+        <h2>{{report.title}} / {{report.id}}</h2>
+    </div>
+    <div class="generalDiv">
+        <p style="font-weight: bold;">Binanız hakkında genel bilgiler aşağıda verilmiştir:</p>
+        <p style="float: left; width: 50%;">Enlem: <mark style="color: red; background-color: beige;"> {{report.latitude}}</mark></p>
+        <p> Boylam: <mark style="color: red; background-color: beige; "> {{report.longitude}}</mark></p>
+        <p style="float: left; width: 50%;">Metrekare cinsinden kat alanı: <mark
+                style="color: red; background-color: beige;">
+                {{report.areaOfFloor}}m²</mark></p>
+        <p>Binanızın kat sayısı: <mark style="color: red; background-color: beige;">
+                {{report.buildingFloorNumber}}</mark></p>
+        <p style="float: left; width: 50%;">Bina kullanım sınıfınız: <mark style="color: red; background-color: beige;">
+                {{report.buildingUsageClass}}</mark></p>
+        <p>En büyük yer ivmesi(g) - PGA: <mark id="pgaMark" style="color: red; background-color: beige;"></mark></p>
+        <p style="float: left; width: 50%;">1.0 sn periyot için spektral ivme(g) - S1: <mark id="s1Mark"
+                style="color: red; background-color: beige;"></mark></p>
+        <p>En büyük yer hızı(cm/sn) - PGV: <mark id="pgvMark" style="color: red; background-color: beige;"></mark>
+        </p>
+        <p>Kısa periyot(0.2 sn) için spektral ivme(g) - SS: <mark id="ssMark"
+                style="color: red; background-color: beige;"></mark></p>
+        <p style="font-weight: bold;">Aşağıda her zemin sınıfı için olası durumlar verilmiş olup. Vermiş olduğunuz
+            bilgilere göre daha olası olan sonuç vurgulanmıştır. </p>
+    </div>
+    <div class="zaDiv">
+        <h3 id="zah">ZA Zemin İçin Veriler</h3>
+        <p>Binanızın oturduğu zeminin cinsi <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "DOLGU DEĞİL"</mark></p>
+        <p>Bu zeminde sıvılaşma olasılığı <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "YOK"</mark></p>
+        <p>Bu zeminde deprem dalgalarının yükseltgenme olasılığı <mark
+                style="color: red; background-color: beige; font-weight:bold ;"> "YOKTUR"</mark></p>
+        <p>1.0 saniye periyot için yerel zemin etki Katsayısı - F1: <mark id="zaf1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot bölgesi için yerel zemin etki Katsayısı - Fs: <mark id="zafs"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>1.0 saniye periyot için tasarım spektral ivme katsayısı - SD1: <mark id="zasd1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot tasarım spektral ivme katsayısı - SDS: <mark id="zasds"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Deprem tasarım sınıfı - DTS: <mark id="zadts"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+
+    </div>
+    <div class="zbDiv">
+        <h3 id="zbh">ZB Zemin İçin Veriler</h3>
+        <p>Binanızın oturduğu zeminin cinsi<mark style="color: red; background-color: beige; font-weight:bold ;"> "DOLGU
+                DEĞİL"</mark></p>
+        <p>Bu zeminde sıvılaşma olasılığı <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "YOK"</mark></p>
+        <p>Bu zeminde deprem dalgalarının yükseltgenme olasılığı <mark
+                style="color: red; background-color: beige; font-weight:bold ;"> "YOKTUR"</mark></p>
+        <p>1.0 saniye periyot için yerel zemin etki Katsayısı - F1: <mark id="zbf1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot bölgesi için yerel zemin etki Katsayısı - Fs: <mark id="zbfs"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>1.0 saniye periyot için tasarım spektral ivme katsayısı - SD1: <mark id="zbsd1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot tasarım spektral ivme katsayısı - SDS: <mark id="zbsds"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Deprem tasarım sınıfı - DTS: <mark id="zbdts"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+    </div>
+    <div class="zcDiv">
+        <h3 id="zch">ZC Zemin İçin Veriler</h3>
+        <p>Binanızın oturduğu zeminin cinsi <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "DOLGU OLMA ŞANSI VAR"</mark></p>
+        <p>Bu zeminde sıvılaşma olasılığı <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "YOK"</mark></p>
+        <p>Bu zeminde deprem dalgalarının yükseltgenme olasılığı <mark
+                style="color: red; background-color: beige; font-weight:bold ;"> "YOKTUR"</mark></p>
+        <p>1.0 saniye periyot için yerel zemin etki Katsayısı - F1: <mark id="zcf1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot bölgesi için yerel zemin etki Katsayısı - Fs: <mark id="zcfs"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>1.0 saniye periyot için tasarım spektral ivme katsayısı - SD1: <mark id="zcsd1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot tasarım spektral ivme katsayısı - SDS: <mark id="zcsds"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Deprem tasarım sınıfı - DTS: <mark id="zcdts"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+    </div>
+    <div class="zdDiv">
+        <h3 id="zdh">ZD Zemin İçin Veriler</h3>
+        <p>Binanızın oturduğu zeminin cinsi <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "DOLGU OLMA ŞANSI VAR"</mark></p>
+        <p>Bu zeminde sıvılaşma olasılığı <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "ORTALAMA"</mark></p>
+        <p>Bu zeminde deprem dalgalarının yükseltgenme olasılığı <mark
+                style="color: red; background-color: beige; font-weight:bold ;"> "VARDIR"</mark></p>
+        <p>1.0 saniye periyot için yerel zemin etki Katsayısı - F1: <mark id="zdf1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot bölgesi için yerel zemin etki Katsayısı - Fs: <mark id="zdfs"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>1.0 saniye periyot için tasarım spektral ivme katsayısı - SD1: <mark id="zdsd1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot tasarım spektral ivme katsayısı - SDS: <mark id="zdsds"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Deprem tasarım sınıfı - DTS: <mark id="zddts"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+    </div>
+    <div class="zeDiv">
+        <h3 id="zeh">ZE Zemin İçin Veriler</h3>
+        <p>Binanızın oturduğu zeminin cinsi <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "DOLGU ZEMİN"</mark></p>
+        <p>Bu zeminde sıvılaşma olasılığı <mark style="color: red; background-color: beige; font-weight:bold ;">
+                "YÜKSEK"</mark></p>
+        <p>Bu zeminde deprem dalgalarının yükseltgenme olasılığı <mark
+                style="color: red; background-color: beige; font-weight:bold ;"> "VARDIR"</mark></p>
+        <p>1.0 saniye periyot için yerel zemin etki Katsayısı - F1: <mark id="zef1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot bölgesi için yerel zemin etki Katsayısı - Fs: <mark id="zefs"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>1.0 saniye periyot için tasarım spektral ivme katsayısı - SD1: <mark id="zesd1"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Kısa periyot tasarım spektral ivme katsayısı - SDS: <mark id="zesds"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+        <p>Deprem tasarım sınıfı - DTS: <mark id="zedts"
+                style="color: red; background-color: beige; font-weight:bold ;"></mark></p>
+    </div>
+    <input type="hidden" id="hidv" value="{{report.vs30}}">
+    <input type="hidden" id="hidlat" value="{{report.latitude}}">
+    <input type="hidden" id="hidlng" value="{{report.longitude}}">
+    <input type="hidden" id="hidbks" value="{{report.buildingUsageClass}}">
+
+
+</div>
+
+<script>
+    var ground;
+    var a = 1500;
+    var b = 760;
+    var c = 360;
+    var d = 180;
+    var e = 0
+    value = document.getElementById("hidv").value
+    vs30 = parseFloat(value)
+    lat_str = document.getElementById("hidlat").value
+    lat = parseFloat(lat_str)
+    lng_str = document.getElementById("hidlng").value
+    lng = parseFloat(lng_str)
+    bks_str = document.getElementById("hidbks").value
+    bks = bks_str[3]
+
+    if (vs30 > a) {
+        document.getElementById("zah").style.color = "darkblue"
+        document.getElementById("zah").style.fontWeight = "bold"
+        ground = "a";
+    } else if (vs30 > b) {
+        document.getElementById("zbh").style.color = "darkblue"
+        document.getElementById("zbh").style.fontWeight = "bold"
+        ground = "b";
+    } else if (vs30 > c) {
+        document.getElementById("zch").style.color = "darkblue"
+        document.getElementById("zch").style.fontWeight = "bold"
+        ground = "c";
+    } else if (vs30 > d) {
+        document.getElementById("zdh").style.color = "darkblue"
+        document.getElementById("zdh").style.fontWeight = "bold"
+        ground = "d";
+    } else {
+        document.getElementById("zeh").style.color = "darkblue"
+        document.getElementById("zeh").style.fontWeight = "bold"
+        ground = "e";
+    }
+
+
+
+    var temp1 = "{{en|safe}}";
+    var temp_en = []
+    var temp2 = "{{boy|safe}}";
+    var temp_boy = []
+    var temp3 = "{{pga|safe}}";
+    var temp_pga = []
+    var temp4 = "{{ss|safe}}";
+    var temp_ss = []
+    var temp5 = "{{s1|safe}}";
+    var temp_s1 = []
+    var temp6 = "{{pgv|safe}}";
+    var temp_pgv = []
+
+
+    temp_en = makeArray(temp1)
+    temp_boy = makeArray(temp2)
+    temp_pga = makeArray(temp3)
+    temp_ss = makeArray(temp4)
+    temp_s1 = makeArray(temp5)
+    temp_pgv = makeArray(temp6)
+
+    var en = temp_en.map(Number)
+    var boy = temp_boy.map(Number)
+    var pga = temp_pga.map(Number)
+    var ss = temp_ss.map(Number)
+    var s1 = temp_s1.map(Number)
+    var pgv = temp_pgv.map(Number)
+
+    var closeLat = closest(lat, en)
+    var closeLng = closest(lng, boy)
+    var indexLat = en.findIndex(z => z == closeLat);
+    var indexLng = boy.findIndex(z => z == closeLng);
+    var realIndex = 0;
+    error1 = Math.abs(en[indexLat] - lat) + Math.abs(boy[indexLat] - lng)
+    error2 = Math.abs(en[indexLng] - lat) + Math.abs(boy[indexLng] - lng)
+    if (error1 < error2) {
+        realIndex = indexLat
+    } else {
+        realIndex = indexLng
+    }
+
+
+    var pgaVal = pga[realIndex];
+    var pgvVal = pgv[realIndex];
+    var s1Val = s1[realIndex];
+    var ssVal = ss[realIndex];
+    document.getElementById("pgaMark").innerHTML = pgaVal;
+    document.getElementById("ssMark").innerHTML = ssVal;
+    document.getElementById("s1Mark").innerHTML = s1Val;
+    document.getElementById("pgvMark").innerHTML = pgvVal;
+
+
+    var f1a = 0.8;
+    var f1b = 0.8;
+    var f1c;
+    var f1d;
+    var f1e;
+    var fsa = 0.8;
+    var fsb = 0.9;
+    var fsc;
+    var fsd;
+    var fse;
+    var dtsa;
+    var dtsb;
+    var dtsc;
+    var dtsd;
+    var dtse;
+
+
+    if (s1Val <= 0.1) {
+        f1c = 1.5;
+        f1d = 2.4;
+        f1e = 4.2;
+    } else if (s1Val <= 0.2) {
+        f1c = 1.5;
+        f1d = 2.2;
+        f1e = 3.3;
+    } else if (s1Val <= 0.3) {
+        f1c = 1.5;
+        f1d = 2.0;
+        f1e = 2.8;
+    } else if (s1Val <= 0.4) {
+        f1c = 1.5;
+        f1d = 1.9;
+        f1e = 2.4;
+    } else if (s1Val <= 0.5) {
+        f1c = 1.5;
+        f1d = 1.8;
+        f1e = 2.2;
+    } else {
+        f1c = 1.4;
+        f1d = 1.7;
+        f1e = 2.0;
+    }
+
+
+    if (ssVal <= 0.25) {
+        fsc = 1.3;
+        fsd = 1.6;
+        fse = 2.4;
+    } else if (ssVal <= 0.5) {
+        fsc = 1.3;
+        fsd = 1.4;
+        fse = 1.7;
+    } else if (ssVal <= 0.75) {
+        fsc = 1.2;
+        fsd = 1.2;
+        fse = 1.3;
+    } else if (ssVal <= 1) {
+        fsc = 1.2;
+        fsd = 1.1;
+        fse = 1.1;
+    } else if (ssVal <= 1.25) {
+        fsc = 1.2;
+        fsd = 1.0;
+        fse = 0.9;
+    } else {
+        fsc = 1.2;
+        fsd = 1.0;
+        fse = 0.8;
+    }
+
+
+    var sdsa = fsa * ssVal
+    var sdsb = fsb * ssVal
+    var sdsc = fsc * ssVal
+    var sdsd = fsd * ssVal
+    var sdse = fse * ssVal
+
+
+    var sd1a = s1Val * f1a
+    var sd1b = s1Val * f1b
+    var sd1c = s1Val * f1c
+    var sd1d = s1Val * f1d
+    var sd1e = s1Val * f1e
+
+
+    if (bks == "1") {
+        if (sdsa < 0.33) {
+            dtsa = "4a"
+        } else if (sdsa < 0.5) {
+            dtsa = "3a"
+        } else if (sdsa < 0.75) {
+            dtsa = "2a"
+        } else {
+            dtsa = "1a"
+        }
+        if (sdsb < 0.33) {
+            dtsb = "4a"
+        } else if (sdsb < 0.5) {
+            dtsb = "3a"
+        } else if (sdsb < 0.75) {
+            dtsb = "2a"
+        } else {
+            dtsb = "1a"
+        }
+        if (sdsc < 0.33) {
+            dtsc = "4a"
+        } else if (sdsc < 0.5) {
+            dtsc = "3a"
+        } else if (sdsc < 0.75) {
+            dtsc = "2a"
+        } else {
+            dtsc = "1a"
+        }
+        if (sdsd < 0.33) {
+            dtsd = "4a"
+        } else if (sdsd < 0.5) {
+            dtsd = "3a"
+        } else if (sdsd < 0.75) {
+            dtsd = "2a"
+        } else {
+            dtsd = "1a"
+        }
+        if (sdse < 0.33) {
+            dtse = "4a"
+        } else if (sdse < 0.5) {
+            dtse = "3a"
+        } else if (sdse < 0.75) {
+            dtse = "2a"
+        } else {
+            dtse = "1a"
+        }
+    } else {
+        if (sdsa < 0.33) {
+            dtsa = "4"
+        } else if (sdsa < 0.5) {
+            dtsa = "3"
+        } else if (sdsa < 0.75) {
+            dtsa = "2"
+        } else {
+            dtsa = "1"
+        }
+        if (sdsb < 0.33) {
+            dtsb = "4"
+        } else if (sdsb < 0.5) {
+            dtsb = "3"
+        } else if (sdsb < 0.75) {
+            dtsb = "2"
+        } else {
+            dtsb = "1"
+        }
+        if (sdsc < 0.33) {
+            dtsc = "4"
+        } else if (sdsc < 0.5) {
+            dtsc = "3"
+        } else if (sdsc < 0.75) {
+            dtsc = "2"
+        } else {
+            dtsc = "1"
+        }
+        if (sdsd < 0.33) {
+            dtsd = "4"
+        } else if (sdsd < 0.5) {
+            dtsd = "3"
+        } else if (sdsd < 0.75) {
+            dtsd = "2"
+        } else {
+            dtsd = "1"
+        }
+        if (sdse < 0.33) {
+            dtse = "4"
+        } else if (sdse < 0.5) {
+            dtse = "3"
+        } else if (sdse < 0.75) {
+            dtse = "2"
+        } else {
+            dtse = "1"
+        }
+    }
+
+  
+
+    document.getElementById("zaf1").innerHTML = f1a
+    document.getElementById("zafs").innerHTML = fsa
+    document.getElementById("zasd1").innerHTML = sd1a.toFixed(4)
+    document.getElementById("zasds").innerHTML = sdsa.toFixed(4)
+    document.getElementById("zadts").innerHTML = dtsa
+
+
+    document.getElementById("zaf1").innerHTML = f1a
+    document.getElementById("zafs").innerHTML = fsa
+    document.getElementById("zasd1").innerHTML = sd1a.toFixed(4)
+    document.getElementById("zasds").innerHTML = sdsa.toFixed(4)
+    document.getElementById("zadts").innerHTML = dtsa
+
+
+    document.getElementById("zbf1").innerHTML = f1b
+    document.getElementById("zbfs").innerHTML = fsb
+    document.getElementById("zbsd1").innerHTML = sd1b.toFixed(4)
+    document.getElementById("zbsds").innerHTML = sdsb.toFixed(4)
+    document.getElementById("zbdts").innerHTML = dtsb
+
+
+    document.getElementById("zcf1").innerHTML = f1c
+    document.getElementById("zcfs").innerHTML = fsc
+    document.getElementById("zcsd1").innerHTML = sd1c.toFixed(4)
+    document.getElementById("zcsds").innerHTML = sdsc.toFixed(4)
+    document.getElementById("zcdts").innerHTML = dtsc
+
+
+    document.getElementById("zdf1").innerHTML = f1d
+    document.getElementById("zdfs").innerHTML = fsd
+    document.getElementById("zdsd1").innerHTML = sd1d.toFixed(4)
+    document.getElementById("zdsds").innerHTML = sdsd.toFixed(4)
+    document.getElementById("zddts").innerHTML = dtsd
+
+
+    document.getElementById("zef1").innerHTML = f1e
+    document.getElementById("zefs").innerHTML = fse
+    document.getElementById("zesd1").innerHTML = sd1e.toFixed(4)
+    document.getElementById("zesds").innerHTML = sdse.toFixed(4)
+    document.getElementById("zedts").innerHTML = dtse
+
+    function closest(number, array) {
+        return array.reduce((x, y) => {
+            let xDiff = Math.abs(x - number);
+            let yDiff = Math.abs(y - number);
+
+            if (xDiff == yDiff) {
+                return x > y ? x : y;
+            } else {
+                return yDiff < xDiff ? y : x;
+            }
+        });
+    }
+
+    function makeArray(array) {
+        var first = 1
+        var vals = []
+        for (let i = 1; i < array.length; i++) {
+            if (array[i] == ",") {
+                vals.push(array.slice(first, i))
+                first = i + 1
+            } else if (array[i] == "]") {
+                vals.push(array.slice(first, i))
+                break;
+            }
+        }
+        return vals
+    }
+
+</script>
+
+{% endblock %}

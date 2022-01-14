@@ -1,0 +1,15 @@
+.questionField{
+    background: beige;
+    margin: auto;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.questionField div{
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+}
+

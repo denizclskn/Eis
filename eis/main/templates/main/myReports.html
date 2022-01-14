@@ -1,0 +1,34 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css\myReports.css' %}">
+<div class="mainDiv">
+    <h2>Raporlarım</h2>
+    <!-- 
+    <input type="text" id="myInput"  placeholder="Rapor adı girin" title="Type in a name">7
+    -->
+    <ul id="myUL">
+    {% for i in reports %}
+        <li>
+            <div class="nameDiv">
+                <p>{{ i.title }}</p> 
+            </div>
+            <div class="buttonDiv">
+                <a class="btn btn-sm btn-secondary" href="{% url 'firstReport' i.id %}" role="button" style="width: 25%;">Detay</a>
+                <a class="btn btn-sm btn-secondary" href="{% url 'deleteReport' i.id %}" role="button" style="width: 25%;">Sil</a>
+                <a class="btn btn-sm btn-secondary" href="{% url 'genPDF' i.id %}" role="button" style="width: 25%;">Paylaş</a>
+            </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<script>
+
+
+</script>
+{% endblock %}

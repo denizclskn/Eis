@@ -1,0 +1,52 @@
+{% extends "main/layout.html" %}
+{% load static %}
+{% block content %}
+<hr>
+<hr>
+<hr>
+<link rel="stylesheet" href="{% static 'css\reportQuestion.css' %}">
+<div class="questionField">
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div class="reportNameDiv">
+            <label for="title">Başlık: </label>
+            {{form.title}}
+        </div>
+        <div class="selectBKSDiv">
+            <label for="buildingUsageClass">Bina Kullanım Sınıfı: </label>
+            {{form.buildingUsageClass}}
+        </div>
+        <div class="yearDiv">
+            <label for="buildingConstrucionYear">Bina İnşa Yılı: </label>
+            {{form.buildingConstrucionYear}}
+        </div>
+        <div class="floorNumDiv">
+            <label for="buildingFloorNumber">Bina Kat Sayısı: </label>
+            {{form.buildingFloorNumber}}
+        </div>
+        <div class="areaDiv">
+            <label for="areaOfFloor">Kat Alanı: </label>
+            {{form.areaOfFloor}}
+        </div>
+        <div class="buildingTypeDiv">
+            <label for="buildingType">Bina Tipi: </label>
+            {{form.buildingType}}
+        </div>
+        <div class="buttonDiv">
+            <input type="submit" class="btn btn-secondary btn-lg btn-block" id="fwd" value="İleri">
+        </div>
+    </form>
+</div>
+
+<script>
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[2].min=1800
+    form_fields[2].max=2021
+    form_fields[3].min=1
+    form_fields[3].max=60
+    form_fields[4].min=1
+    form_fields[4].max=500
+</script>
+
+
+{% endblock %}

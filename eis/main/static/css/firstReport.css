@@ -1,0 +1,17 @@
+.readValues {
+    margin: auto;
+    width: 50%;
+    border: 2px solid black;
+    padding: 10px;
+    background-color: beige;
+    }
+
+.readValues div{
+    margin: 30px 15px;
+}
+
+.titleDiv{
+    display: flex;
+    justify-content: center;
+    color: darkblue;
+}
